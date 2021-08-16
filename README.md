@@ -19,6 +19,14 @@ npx hardhat test
 ```
 npx hardhat run scripts/deploy.js --network [Your Network]
 ```
+# CPOOL
+
+Token Parameter | Value
+------------ | -------------
+Token name	| Clearpool
+Symbol 	 | CPOOL
+Decimals |	18
+Total Supply | 1 000 000 000
 
 # Vesting
 
