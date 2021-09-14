@@ -7,19 +7,19 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 
 contract Vesting is Ownable {
-    IERC20 public CPOOL;
+    IERC20 public immutable CPOOL;
 
     struct VestingParams {
-        uint256 amount;
-        uint256 vestingBegin;
-        uint256 vestingCliff;
-        uint256 vestingEnd;
-        uint256 lastUpdate;
-        uint256 claimed;
+        uint amount;
+        uint vestingBegin;
+        uint vestingCliff;
+        uint vestingEnd;
+        uint lastUpdate;
+        uint claimed;
     }
 
     mapping (address => VestingParams) public recipients;
-    uint256 public vestedAmount;
+    uint public totalVest;
 
     constructor(address tokenAddress) {
         CPOOL = IERC20(tokenAddress);
@@ -28,10 +28,10 @@ contract Vesting is Ownable {
 
     function holdTokens(
         address recipient_,
-        uint256 amount_,
-        uint256 vestingBegin_,
-        uint256 vestingCliff_,
-        uint256 vestingEnd_
+        uint amount_,
+        uint vestingBegin_,
+        uint vestingCliff_,
+        uint vestingEnd_
     )
         onlyOwner
         external
@@ -39,10 +39,10 @@ contract Vesting is Ownable {
         require(vestingBegin_ >= block.timestamp, 'Vesting::holdTokens: vesting begin too early');
         require(vestingEnd_ > vestingCliff_, 'Vesting::holdTokens: end is too early');
         require(vestingCliff_ >= vestingBegin_, 'Vesting::holdTokens: cliff is too early');
-        require(vestedAmount + amount_ <= CPOOL.balanceOf(address(this)), 'Vesting::holdTokens: notEnoughFunds');
+        require(totalVest + amount_ <= CPOOL.balanceOf(address(this)), 'Vesting::holdTokens: notEnoughFunds');
         require(recipients[recipient_].amount == 0, 'Vesting::holdTokens: recipient already have lockup');
 
-        vestedAmount += amount_;
+        totalVest += amount_;
         recipients[recipient_] = VestingParams({
             amount: amount_,
             vestingBegin: vestingBegin_,
@@ -57,15 +57,15 @@ contract Vesting is Ownable {
         require(block.timestamp >= recipients[recipient_].vestingCliff, 'Vesting::claim: not time yet');
         require(recipients[recipient_].amount > 0, 'Vesting::claim: recipient not valid');
 
-        uint256 amount = getAvailableBalance(recipient_);
+        uint amount = getAvailableBalance(recipient_);
         recipients[recipient_].lastUpdate = block.timestamp;
         recipients[recipient_].claimed += amount;
         require(IERC20(CPOOL).transfer(recipient_, amount), 'Vesting::claim: transfer error');
     }
 
-    function getAvailableBalance(address recipient_) public view returns(uint256) {
+    function getAvailableBalance(address recipient_) public view returns(uint) {
         VestingParams memory vestParams = recipients[recipient_];
-        uint256 amount;
+        uint amount;
         if (block.timestamp < vestParams.vestingCliff) {
             return 0;
         }
@@ -77,3 +77,4 @@ contract Vesting is Ownable {
         return amount;
     }
 }
+
