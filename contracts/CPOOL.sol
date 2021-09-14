@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.4;
-pragma experimental ABIEncoderV2;
+
 
 contract CPOOL {
     /// @notice EIP-20 token name for this token
@@ -14,7 +13,7 @@ contract CPOOL {
     uint8 public constant decimals = 18;
 
     /// @notice Total number of tokens in circulation
-    uint public totalSupply = 1_000_000_000e18;
+    uint public constant totalSupply = 1_000_000_000e18;
 
     /// @notice Allowance amounts on behalf of others
     mapping (address => mapping (address => uint96)) internal allowances;
@@ -59,11 +58,7 @@ contract CPOOL {
     event Approval(address indexed owner, address indexed spender, uint256 amount);
 
 
-    constructor
-    (
-        address multisig
-    )
-    {
+    constructor(address multisig) {
         balances[multisig] = uint96(totalSupply);
         emit Transfer(address(0), multisig, totalSupply);
     }
@@ -150,7 +145,7 @@ contract CPOOL {
      * @notice Delegate votes from `msg.sender` to `delegatee`
      * @param delegatee The address to delegate votes to
      */
-    function delegate(address delegatee) public {
+    function delegate(address delegatee) external {
         return _delegate(msg.sender, delegatee);
     }
 
@@ -163,7 +158,7 @@ contract CPOOL {
      * @param r Half of the ECDSA signature pair
      * @param s Half of the ECDSA signature pair
      */
-    function delegateBySig(address delegatee, uint nonce, uint expiry, uint8 v, bytes32 r, bytes32 s) public {
+    function delegateBySig(address delegatee, uint nonce, uint expiry, uint8 v, bytes32 r, bytes32 s) external {
         bytes32 domainSeparator = keccak256(abi.encode(DOMAIN_TYPEHASH, keccak256(bytes(name)), getChainId(), address(this)));
         bytes32 structHash = keccak256(abi.encode(DELEGATION_TYPEHASH, delegatee, nonce, expiry));
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", domainSeparator, structHash));
@@ -191,7 +186,7 @@ contract CPOOL {
      * @param blockNumber The block number to get the vote balance at
      * @return The number of votes the account had as of the given block
      */
-    function getPriorVotes(address account, uint blockNumber) public view returns (uint96) {
+    function getPriorVotes(address account, uint blockNumber) external view returns (uint96) {
         require(blockNumber < block.number, "Cpool::getPriorVotes: not yet determined");
 
         uint32 nCheckpoints = numCheckpoints[account];
@@ -304,3 +299,4 @@ contract CPOOL {
         return chainId;
     }
 }
+
