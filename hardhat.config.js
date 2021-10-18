@@ -73,23 +73,23 @@ module.exports = {
      **/
     kovan: {
       url: `https://kovan.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [KOVAN_PRIVATE_KEY]
+      accounts: KOVAN_PRIVATE_KEY ? [KOVAN_PRIVATE_KEY] : []
     },
     mainnet: {
       url: `https://mainnet.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [MAINNET_PRIVATE_KEY]
+      accounts: MAINNET_PRIVATE_KEY ? [MAINNET_PRIVATE_KEY] : []
     },
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${INFURA_API_KEY}`,
-      accounts: [RINKEBY_PRIVATE_KEY]
+      accounts: RINKEBY_PRIVATE_KEY ? [RINKEBY_PRIVATE_KEY] : []
     },
     BSCTest: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-      accounts: [KOVAN_PRIVATE_KEY]
+      accounts: BSC_PRIVATE_KEY ? [BSC_PRIVATE_KEY] : []
     },
     BSC: {
       url: 'https://bsc-dataseed.binance.org/',
-      accounts: [BSC_PRIVATE_KEY]
+      accounts: BSC_PRIVATE_KEY ? [BSC_PRIVATE_KEY] : []
     }
   },
   etherscan: {
