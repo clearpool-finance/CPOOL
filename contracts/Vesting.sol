@@ -60,6 +60,7 @@ contract Vesting is Ownable {
         uint amount = getAvailableBalance(recipient_);
         recipients[recipient_].lastUpdate = block.timestamp;
         recipients[recipient_].claimed += amount;
+        totalVest -= amount;
         require(IERC20(CPOOL).transfer(recipient_, amount), 'Vesting::claim: transfer error');
     }
 
