@@ -2,7 +2,7 @@ const { expect } = require("chai");
 const { ethers } = require("hardhat");
 const { increaseTime } = require("./Utils");
 
-describe("Vesting Test", function () {
+describe("Auto Vesting Test", function () {
     let CPOOL;
     let vesting;
     let deployer, adr1, adr2;
