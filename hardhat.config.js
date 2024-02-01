@@ -90,7 +90,12 @@ module.exports = {
     BSC: {
       url: 'https://bsc-dataseed.binance.org/',
       accounts: BSC_PRIVATE_KEY ? [BSC_PRIVATE_KEY] : []
-    }
+    },
+    sepolia: {
+      chainId: 11155111,
+      url: `https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_KEY}` || '',
+      accounts: MAINNET_PRIVATE_KEY ? [MAINNET_PRIVATE_KEY] : []
+    },
   },
   etherscan: {
     //@ts-ignore
