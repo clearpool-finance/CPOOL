@@ -89,8 +89,8 @@ module.exports = {
     },
     BSC: {
       url: 'https://bsc-dataseed.binance.org/',
-      accounts: [BSC_PRIVATE_KEY]
-    }
+      accounts: BSC_PRIVATE_KEY ? [BSC_PRIVATE_KEY] : []
+    },
   },
   etherscan: {
     //@ts-ignore

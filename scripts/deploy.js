@@ -4,6 +4,7 @@
 // When running the script with `hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const autoVestingArgs = require('./config')
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -17,8 +18,7 @@ async function main() {
 
   const [ deployer ] = await ethers.getSigners();
 
-
-  const CPOOL = await hre.ethers.getContractFactory("Clearpool");
+  const CPOOL = await hre.ethers.getContractFactory("CPOOL");
   const cpool = await CPOOL.deploy(deployer.address);
   await cpool.deployed();
   console.log("cpool deployed to:", cpool.address);
@@ -27,6 +27,11 @@ async function main() {
   const vesting = await Vesting.deploy(cpool.address);
   await vesting.deployed();
   console.log("Vesting deployed to:", vesting.address);
+
+  const AutoVesting = await hre.ethers.getContractFactory('AutoVesting')
+  const autoVesting = await AutoVesting.deploy(autoVestingArgs.cpool, autoVestingArgs.vestingBegin, autoVestingArgs.vestingEnd)
+  await autoVesting.deployed()
+  console.log("Auto-Vesting deployed to:", autoVesting.address)
 
 }
 
