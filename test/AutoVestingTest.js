@@ -18,7 +18,7 @@ describe("Vesting Test", function () {
         VestingCliff = VestingBegin + 10000;
         VestingEnd = VestingBegin + 31536000;
 
-        Vesting = await ethers.getContractFactory("Vesting");
+        Vesting = await ethers.getContractFactory("AutoVesting");
         vesting = await Vesting.deploy(CPOOL.address, VestingBegin, VestingEnd);
     });
 
