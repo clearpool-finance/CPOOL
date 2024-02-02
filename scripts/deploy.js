@@ -7,39 +7,44 @@ const hre = require("hardhat");
 const autoVestingArgs = require('./config')
 
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile 
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+	// Hardhat always runs the compile task when running scripts with its command
+	// line interface.
+	//
+	// If this script is run directly using `node` you may want to call compile 
+	// manually to make sure everything is compiled
+	// await hre.run('compile');
 
-  // We get the contract to deploy
+	// We get the contract to deploy
 
-  const [ deployer ] = await ethers.getSigners();
+ const [ deployer ] = await ethers.getSigners();
+ 
+	 const CPOOL = await hre.ethers.getContractFactory("CPOOL");
+	 const cpool = await CPOOL.deploy(deployer.address);
+	 await cpool.deployed();
+	 console.log("cpool deployed to:", cpool.address);
+ 
+	 const Vesting = await hre.ethers.getContractFactory("Vesting");
+	 const vesting = await Vesting.deploy(cpool.address);
+	 await vesting.deployed();
+	 console.log("Vesting deployed to:", vesting.address);
 
-  const CPOOL = await hre.ethers.getContractFactory("CPOOL");
-  const cpool = await CPOOL.deploy(deployer.address);
-  await cpool.deployed();
-  console.log("cpool deployed to:", cpool.address);
+	const cpoolAddress = '0x66761fa41377003622aee3c7675fc7b5c1c2fac5'
+	const VestingBegin = (await hre.ethers.provider.getBlock()).timestamp + 100;
+	const VestingCliff = VestingBegin + 10000;
+	const VestingEnd = VestingBegin + 31536000;
 
-  const Vesting = await hre.ethers.getContractFactory("Vesting");
-  const vesting = await Vesting.deploy(cpool.address);
-  await vesting.deployed();
-  console.log("Vesting deployed to:", vesting.address);
-
-  const AutoVesting = await hre.ethers.getContractFactory('AutoVesting')
-  const autoVesting = await AutoVesting.deploy(autoVestingArgs.cpool, autoVestingArgs.vestingBegin, autoVestingArgs.vestingEnd)
-  await autoVesting.deployed()
-  console.log("Auto-Vesting deployed to:", autoVesting.address)
+	const AutoVesting = await hre.ethers.getContractFactory('AutoVesting')
+	const autoVesting = await AutoVesting.deploy(cpoolAddress, VestingBegin, VestingEnd)
+	await autoVesting.deployed()
+	console.log("Auto-Vesting deployed to:", autoVesting.address)
 
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main()
-  .then(() => process.exit(0))
-  .catch(error => {
-    console.error(error);
-    process.exit(1);
-  });
+	.then(() => process.exit(0))
+	.catch(error => {
+		console.error(error);
+		process.exit(1);
+	});
