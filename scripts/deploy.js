@@ -16,7 +16,7 @@ async function main() {
 
   // We get the contract to deploy
 
-  const [ deployer ] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
 
   const CPOOL = await hre.ethers.getContractFactory("CPOOL");
   const cpool = await CPOOL.deploy(deployer.address);
@@ -28,8 +28,12 @@ async function main() {
   await vesting.deployed();
   console.log("Vesting deployed to:", vesting.address);
 
+  const VestingBegin = (await hre.ethers.provider.getBlock()).timestamp + 100;
+  const VestingCliff = VestingBegin + 10000;
+  const VestingEnd = VestingBegin + 31536000;
+
   const AutoVesting = await hre.ethers.getContractFactory('AutoVesting')
-  const autoVesting = await AutoVesting.deploy(autoVestingArgs.cpool, autoVestingArgs.vestingBegin, autoVestingArgs.vestingEnd)
+  const autoVesting = await AutoVesting.deploy(autoVestingArgs.cpool, VestingBegin, VestingEnd)
   await autoVesting.deployed()
   console.log("Auto-Vesting deployed to:", autoVesting.address)
 
