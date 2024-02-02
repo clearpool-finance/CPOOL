@@ -16,7 +16,7 @@ async function main() {
 
   // We get the contract to deploy
 
-  const [ deployer ] = await ethers.getSigners();
+  const [deployer] = await ethers.getSigners();
 
   const CPOOL = await hre.ethers.getContractFactory("CPOOL");
   const cpool = await CPOOL.deploy(deployer.address);
@@ -29,8 +29,8 @@ async function main() {
   console.log("Vesting deployed to:", vesting.address);
 
   const VestingBegin = (await hre.ethers.provider.getBlock()).timestamp + 100;
-	const VestingCliff = VestingBegin + 10000;
-	const VestingEnd = VestingBegin + 31536000;
+  const VestingCliff = VestingBegin + 10000;
+  const VestingEnd = VestingBegin + 31536000;
 
   const AutoVesting = await hre.ethers.getContractFactory('AutoVesting')
   const autoVesting = await AutoVesting.deploy(autoVestingArgs.cpool, VestingBegin, VestingEnd)
@@ -42,8 +42,8 @@ async function main() {
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main()
-	.then(() => process.exit(0))
-	.catch(error => {
-		console.error(error);
-		process.exit(1);
-	});
+  .then(() => process.exit(0))
+  .catch(error => {
+    console.error(error);
+    process.exit(1);
+  });
