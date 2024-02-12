@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@nomiclabs/hardhat-web3": "^2.0.0",
-    "@openzeppelin/contracts-upgradeable": "^4.1.0",
+    "@openzeppelin/contracts-upgradeable": "^4.9.3",
     "@openzeppelin/test-helpers": "^0.5.11",
     "solidity-docgen": "^0.5.13"
   }
