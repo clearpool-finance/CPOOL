@@ -113,7 +113,7 @@ _function to claim unclaimed tokens_
 function getAvailableBalance(address account) public view returns(uint)
 ```
 
-_returns amount available to claim for the given account_
+_returns the amount of tokens available to claim for the given account_
 
 ```jsx
 mapping (address => VestingParams) public vestings;
@@ -129,7 +129,7 @@ _returns structure with following params for the given address_:
 ```jsx
 mapping(address => uint256[]) public vestingIds;
 ```
-_Mapping of addresses to lists of their vesting IDs_
+_Mapping of addresses to lists of their vesting IDs. Returns the list of vesting IDs for the given address._
 
 ```jsx
 uint256 public immutable vestingBegin;
