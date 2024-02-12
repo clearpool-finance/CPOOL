@@ -80,3 +80,5 @@ _returns structure with following params_:
 - uint vestingEnd\_ - timestamp of the end of the vesting
 - lastUpdate - timeStamp of last claim
 - claimed - token's amount that was already claimed
+
+# AutoVesting
