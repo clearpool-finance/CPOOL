@@ -119,7 +119,7 @@ _returns amount available to claim for the given account_
 mapping (address => VestingParams) public vestings;
 ```
 
-_returns structure with following params_:
+_returns structure with following params for the given address_:
 
 - amount - initial amount of Vested tokens
 - vestingCliff - timestamp of the end of the Cliff (since this moment tokens become available to claim)
