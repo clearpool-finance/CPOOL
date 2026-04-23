@@ -1,6 +1,5 @@
 # CPOOL — Security Audit (round 1)
 
-Auditor: Claude Code (agent)
 Date: 2026-04-24
 Branch: `security/audit-round-1` off `main` (parent: `1eabeb5`)
 

@@ -1,6 +1,5 @@
 # CPOOL — Security Audit Round 2 Validation
 
-Reviewer: Claude Code (agent, skeptical mode)
 Date: 2026-04-24
 Branch: `security/audit-round-1`
 Fix commit validated: `a5ef004`
