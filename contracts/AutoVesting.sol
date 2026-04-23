@@ -63,12 +63,14 @@ contract AutoVesting is Ownable {
      */
     function claim(address account) external {
         uint256 totalAmount;
-        for (uint8 i = 0; i < vestingIds[account].length; i++) {
-            uint256 amount = getAvailableBalance(vestingIds[account][i]);
+        uint256[] storage ids = vestingIds[account];
+        uint256 len = ids.length;
+        for (uint256 i = 0; i < len; i++) {
+            uint256 amount = getAvailableBalance(ids[i]);
             if (amount > 0) {
                 totalAmount += amount;
-                vestings[vestingIds[account][i]].claimed += amount;
-                vestings[vestingIds[account][i]].lastUpdate = block.timestamp;
+                vestings[ids[i]].claimed += amount;
+                vestings[ids[i]].lastUpdate = block.timestamp;
             }
         }
         require(cpool.transfer(account, totalAmount), "Vesting::claim: transfer error");
@@ -82,12 +84,13 @@ contract AutoVesting is Ownable {
      */
     function holdTokens(HoldParams[] memory params) external onlyOwner {
         uint256 totalAmount;
-        for (uint8 i = 0; i < params.length; i++) {
+        uint256 len = params.length;
+        for (uint256 i = 0; i < len; i++) {
             totalAmount += params[i].amount;
         }
         require(cpool.transferFrom(msg.sender, address(this), totalAmount), "Vesting::holdTokens: transfer failed");
         totalVest += totalAmount;
-        for (uint8 i = 0; i < params.length; i++) {
+        for (uint256 i = 0; i < len; i++) {
             _holdTokens(params[i]);
         }
     }
@@ -98,8 +101,10 @@ contract AutoVesting is Ownable {
      * @return amount Total amount of available tokens
      */
     function getAvailableBalanceOf(address account) external view returns (uint256 amount) {
-        for (uint8 i = 0; i < vestingIds[account].length; i++) {
-            amount += getAvailableBalance(vestingIds[account][i]);
+        uint256[] storage ids = vestingIds[account];
+        uint256 len = ids.length;
+        for (uint256 i = 0; i < len; i++) {
+            amount += getAvailableBalance(ids[i]);
         }
     }
 
